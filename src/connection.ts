@@ -1,3 +1,5 @@
+import i18n from './i18n';
+
 /**
  * @param {string} method HTTP method
  * @param {string} url HTTP Url
@@ -30,7 +32,7 @@ export async function request(method: string, url: string, body?: string) {
         };
         req.onerror = (event) => {
             if (notifier) {
-                notifier.snack('Communication Error');
+                notifier.snack(i18n.communicationError);
             }
             reject();
         };
@@ -42,7 +44,7 @@ export async function request(method: string, url: string, body?: string) {
                 resolve(req.response);
             } else {
                 if (notifier) {
-                    notifier.snack('Communication Error');
+                    notifier.snack(i18n.communicationError);
                 }
                 reject();
             }
