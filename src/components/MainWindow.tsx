@@ -20,10 +20,10 @@ import MoveToInboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Theme } from '@material-ui/core/styles/createMuiTheme';
-import { Router, Route } from 'react-router-dom';
-import { createBrowserHistory, History } from 'history';
+import { BrowserRouter, Route, Redirect, Switch, RouteComponentProps } from 'react-router-dom';
 import { INotifier } from '../INotifier';
 import StorageList from './StorageList';
+import FileBrowser from './FileBrowser';
 import * as connection from '../connection';
 import { Info } from '../apitypes';
 
@@ -112,12 +112,10 @@ class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>
     showLoading: false,
     info: null,
   };
-  routerHistory: History<any>
 
   constructor(props: Props & WithStyles<typeof styles, true>) {
     super(props);
     connection.init(this);
-    this.routerHistory = createBrowserHistory();
   }
 
   async componentDidMount() {
@@ -172,12 +170,15 @@ class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>
     if (this.state.info !== null) {
       const info: Info = this.state.info;
       routing = (
-        <Router history={this.routerHistory}>
+        <BrowserRouter>
           <div className={classes.scroller}>
-            <Route path="/" exact component={() => <StorageList info={info} /> } />
-            <Route path="/files" component={() => <h1>Files</h1>} />
+            <Switch>
+              <Route path="/storage" exact component={(props: RouteComponentProps) => <StorageList {...props} info={info}/> } />
+              <Route path="/fs" component={FileBrowser} />
+              <Route><Redirect to='/storage'></Redirect></Route>
+            </Switch>
           </div>
-        </Router>
+        </BrowserRouter>
       )
     }
 
