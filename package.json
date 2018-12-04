@@ -1,0 +1,33 @@
+{
+  "name": "sweech-client",
+  "version": "24.0.0",
+  "description": "Sweech Wifi File Transfer",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "_() { webpack-dev-server --env.apiserver=$1; }; _",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Éric ALBER",
+  "private": true,
+  "devDependencies": {
+    "@types/material-ui": "^0.21.5",
+    "awesome-typescript-loader": "^5.2.1",
+    "copy-webpack-plugin": "^4.6.0",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.1.6",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
+    "@types/react": "^16.7.6",
+    "@types/react-dom": "^16.0.9",
+    "@types/react-router-dom": "^4.3.1",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1"
+  }
+}
