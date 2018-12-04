@@ -25,6 +25,7 @@ import { INotifier } from '../INotifier';
 import StorageList from './StorageList';
 import FileBrowser from './FileBrowser';
 import * as connection from '../connection';
+import i18n from '../i18n';
 import { Info } from '../apitypes';
 
 const appTheme = createMuiTheme({
@@ -37,7 +38,7 @@ const appTheme = createMuiTheme({
   },
 });
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -147,16 +148,7 @@ class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>
         <Toolbar><Typography variant="h6" color="textSecondary" noWrap>RefTel</Typography></Toolbar>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <MoveToInboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          {[i18n.fileBrowser, i18n.images, i18n.videos, i18n.music, i18n.documents, i18n.clipboard].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <MoveToInboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={text} />
