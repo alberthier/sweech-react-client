@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 interface I18n {
     ok: string,
     cancel: string,
@@ -177,6 +179,7 @@ namespace Translations {
 function setup(): I18n {
   const lang = window.navigator.language.substr(0, 2);
   const translation = (Translations as any)[lang] || Translations.en;
+  moment.locale(lang);
   return new translation();
 }
 
