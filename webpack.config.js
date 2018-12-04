@@ -44,7 +44,7 @@ module.exports = function(env, argv) {
             historyApiFallback: true,
             proxy: {
                 '/api': {
-                    target: `http://${env.apiserver}`
+                    target: `${env && env.apiserver && 'http://' + env.apiserver}`
                 }
             }
         }
