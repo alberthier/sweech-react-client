@@ -9,10 +9,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from "@material-ui/core/Typography";
 import Checkbox from '@material-ui/core/Checkbox';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import PaperList from './PaperList';
 import * as connection from '../connection';
-import { Ls } from '../apitypes';
+import { Ls, Info } from '../apitypes';
 import { getFileIcon, getPrettySize, getPrettySizeUnit } from '../tools';
 
 const styles = createStyles({
@@ -37,10 +37,26 @@ class FileBrowser extends React.PureComponent<Props, State> {
     data: null
   };
 
-  async componentWillMount() {
-    const path = this.props.location.pathname.substr(this.props.match.path.length);
-    let data = await connection.get('/api/ls' + path) as Ls;
-    this.setState({data: data});
+  async componentDidMount() {
+    await this.fetch();
+  }
+
+  async componentDidUpdate(prevProps: Props, prevState: State) {
+    const path = this.getPath(this.props);
+    const prevPath = this.getPath(prevProps);
+    if (path !== prevPath) {
+      await this.fetch();
+    }
+  }
+
+  private getPath(props: Props) {
+    const path = props.location.pathname.substr(this.props.match.path.length);
+    return path === '/' ? '' : path;
+  }
+
+  private async fetch() {
+    const path = this.getPath(this.props);
+    this.setState({ data: await connection.get('/api/ls' + path) as Ls });
   }
 
   render() {
@@ -49,10 +65,6 @@ class FileBrowser extends React.PureComponent<Props, State> {
     }
     const data = this.state.data;
     const classes = this.props.classes;
-    let icontype = getFileIcon("blabla");
-    if (icontype !== null) {
-      React.createElement(icontype);
-    }
     return (
       <PaperList>
         {data.content.map((item, index) => {
@@ -62,14 +74,25 @@ class FileBrowser extends React.PureComponent<Props, State> {
           } else {
             icon = item.isReadable ? getFileIcon(item.name) : FileLockIcon;
           }
-          return (
-          <ListItem key={index} button classes={{root: classes.line}} onClick={(e) => this.onClick(e, index)}>
-            <Checkbox disableRipple tabIndex={-1} classes={{root: classes.checkbox}}/>
-            <ListItemIcon>{React.createElement(icon)}</ListItemIcon>
-            <ListItemText>{item.name}</ListItemText>
-            <Typography variant='caption' color='textSecondary'>{getPrettySize(item.size)} {getPrettySizeUnit(item.size)}</Typography>
-          </ListItem>
-        )})}
+          const path = this.getPath(this.props);
+
+          let ui = (
+            <ListItem key={index} button classes={{root: classes.line}} onClick={(e) => this.onClick(e, index)}>
+              <Checkbox disableRipple tabIndex={-1} classes={{root: classes.checkbox}}/>
+              <ListItemIcon>{React.createElement(icon)}</ListItemIcon>
+              <ListItemText>{item.name}</ListItemText>
+              <Typography variant='caption' color='textSecondary'>{getPrettySize(item.size)} {getPrettySizeUnit(item.size)}</Typography>
+            </ListItem>
+          );
+          if (item.isDir && item.isReadable) {
+            ui = (
+              <Link key={index} style={{ textDecoration: 'none' }} to={`/fs${path}/${item.name}`}>
+                {ui}
+              </Link>
+            );
+          }
+          return ui;
+         })}
       </PaperList>
     )
   }
