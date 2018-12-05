@@ -165,8 +165,8 @@ class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>
         <BrowserRouter>
           <div className={classes.scroller}>
             <Switch>
-              <Route path="/storage" exact component={(props: RouteComponentProps) => <StorageList {...props} info={info}/> } />
-              <Route path="/fs" component={FileBrowser} />
+              <Route path="/storage" exact render={(props: RouteComponentProps) => <StorageList {...props} info={info}/> } />
+              <Route path="/fs" render={(props: RouteComponentProps) => <FileBrowser {...props} info={info}/>} />
               <Route><Redirect to='/storage'></Redirect></Route>
             </Switch>
           </div>
