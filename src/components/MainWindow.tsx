@@ -102,10 +102,10 @@ type State = {
     info: Info|null;
 };
 
-type Props = {
+interface Props extends WithStyles<typeof styles, true> {
 }
 
-class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>, State> implements INotifier {
+class MainWindow extends React.Component<Props, State> implements INotifier {
   state: State = {
     mobileOpen: false,
     showSnackBar: false,
@@ -114,7 +114,7 @@ class MainWindow extends React.Component<Props & WithStyles<typeof styles, true>
     info: null,
   };
 
-  constructor(props: Props & WithStyles<typeof styles, true>) {
+  constructor(props: Props) {
     super(props);
     connection.init(this);
   }

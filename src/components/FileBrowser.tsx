@@ -28,10 +28,11 @@ type State = {
   data: Ls|null,
 };
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, WithStyles<typeof styles> {
+  info: Info
 };
 
-class FileBrowser extends React.Component<Props & WithStyles<typeof styles>, State> {
+class FileBrowser extends React.PureComponent<Props, State> {
   state: State = {
     data: null
   };
